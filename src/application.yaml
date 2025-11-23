@@ -1,0 +1,61 @@
+server:
+  port: 8761
+
+spring:
+  application:
+    name: discovery-server
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+    info:
+      enabled: true
+  info:
+    env:
+      enabled: true
+    build:
+      enabled: true
+
+# Application Info
+info:
+  app:
+    name: ${spring.application.name}
+    version: 1.0.0
+    description: Eureka Discovery Server
+    environment: ${spring.profiles.active:development}
+  build:
+    artifact: ${spring.application.name}
+    version: 0.0.1-SNAPSHOT
+    name: ${spring.application.name}
+  java:
+    version: ${java.version}
+  spring-boot:
+    version: 3x
+
+eureka:
+  instance:
+    hostname: localhost
+    appname: ${spring.application.name}
+    instance-id: ${spring.application.name}:${server.port}
+  client:
+    fetch-registry: false
+    register-with-eureka: false
+    service-url:
+      defaultZone: http://admin:admin123@${eureka.instance.hostname}:${server.port}/eureka/
+  server:
+    enable-self-preservation: false
+    eviction-interval-timer-in-ms: 60000
+    use-read-only-response-cache: true
+    response-cache-update-interval-ms: 30000
+
+logging:
+  level:
+    com.netflix.eureka: INFO
+    com.netflix.discovery: INFO
